@@ -8,7 +8,10 @@ from RoboAssay.utils.roboassay_logger import get_logger
 
 logger = get_logger("regression")
 
-BASELINE_DIR = os.path.join(os.getcwd(), ".roboassay_baselines")
+BASELINE_DIR = os.environ.get(
+    "ROBOASSAY_BASELINE_DIR",
+    os.path.join(os.getcwd(), ".roboassay_baselines"),
+)
 
 
 def _get_baseline_path(baseline_id: str) -> str:

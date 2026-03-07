@@ -4,13 +4,14 @@ import json
 from unittest.mock import patch, MagicMock
 
 import pytest
+import requests
 
-from RoboAssay.utils.judge import call_judge, JUDGE_MODEL
+from RoboAssay.utils.judge import call_judge, DEFAULT_JUDGE_MODEL
 
 
 @pytest.fixture
 def mock_env():
-    with patch.dict("os.environ", {"ANTHROPIC_API_KEY": "test-key-123"}):
+    with patch.dict("os.environ", {"ANTHROPIC_API_KEY": "test-key-123"}, clear=False):
         yield
 
 
@@ -80,13 +81,26 @@ class TestCallJudge:
             prompt = payload["messages"][0]["content"]
             assert "CONTEXT:" not in prompt
 
-    def test_uses_correct_model(self, mock_env, mock_judge_response):
+    def test_uses_default_model(self, mock_env, mock_judge_response):
         with patch("RoboAssay.utils.judge.requests.post") as mock_post:
             mock_post.return_value = mock_judge_response()
-            call_judge("rubric", "response")
+            with patch.dict("os.environ", {}, clear=False):
+                # Remove override if present
+                import os
+                os.environ.pop("ROBOASSAY_JUDGE_MODEL", None)
+                call_judge("rubric", "response")
             call_args = mock_post.call_args
             payload = call_args[1]["json"]
-            assert payload["model"] == JUDGE_MODEL
+            assert payload["model"] == DEFAULT_JUDGE_MODEL
+
+    def test_model_overridable_via_env(self, mock_env, mock_judge_response):
+        with patch("RoboAssay.utils.judge.requests.post") as mock_post:
+            mock_post.return_value = mock_judge_response()
+            with patch.dict("os.environ", {"ROBOASSAY_JUDGE_MODEL": "claude-haiku-4-5-20251001"}):
+                call_judge("rubric", "response")
+            call_args = mock_post.call_args
+            payload = call_args[1]["json"]
+            assert payload["model"] == "claude-haiku-4-5-20251001"
 
     def test_sends_correct_headers(self, mock_env, mock_judge_response):
         with patch("RoboAssay.utils.judge.requests.post") as mock_post:
@@ -96,3 +110,47 @@ class TestCallJudge:
             headers = call_args[1]["headers"]
             assert headers["x-api-key"] == "test-key-123"
             assert headers["anthropic-version"] == "2023-06-01"
+
+    def test_sends_request_with_timeout(self, mock_env, mock_judge_response):
+        with patch("RoboAssay.utils.judge.requests.post") as mock_post:
+            mock_post.return_value = mock_judge_response()
+            call_judge("rubric", "response")
+            call_args = mock_post.call_args
+            assert call_args[1]["timeout"] == 30
+
+    def test_raises_runtime_error_on_timeout(self, mock_env):
+        with patch("RoboAssay.utils.judge.requests.post") as mock_post:
+            mock_post.side_effect = requests.Timeout()
+            with pytest.raises(RuntimeError, match="timed out"):
+                call_judge("rubric", "response")
+
+    def test_raises_runtime_error_on_http_error(self, mock_env):
+        with patch("RoboAssay.utils.judge.requests.post") as mock_post:
+            error_response = MagicMock()
+            error_response.status_code = 429
+            error_response.text = "Too Many Requests"
+            http_err = requests.HTTPError(response=error_response)
+            mock_post.return_value.raise_for_status.side_effect = http_err
+            with pytest.raises(RuntimeError, match="429"):
+                call_judge("rubric", "response")
+
+    def test_raises_runtime_error_on_non_json_response(self, mock_env):
+        with patch("RoboAssay.utils.judge.requests.post") as mock_post:
+            response = MagicMock()
+            response.raise_for_status = MagicMock()
+            response.json.return_value = {"content": [{"text": "not valid json {{{"}]}
+            response.text = '{"content": [{"text": "not valid json {{{"}]}'
+            mock_post.return_value = response
+            with pytest.raises(RuntimeError, match="non-JSON"):
+                call_judge("rubric", "response")
+
+    def test_raises_runtime_error_on_missing_verdict_keys(self, mock_env):
+        with patch("RoboAssay.utils.judge.requests.post") as mock_post:
+            response = MagicMock()
+            response.raise_for_status = MagicMock()
+            response.json.return_value = {
+                "content": [{"text": json.dumps({"passed": True})}]
+            }
+            mock_post.return_value = response
+            with pytest.raises(RuntimeError, match="missing expected keys"):
+                call_judge("rubric", "response")
