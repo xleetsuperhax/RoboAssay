@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robotframework-roboassay"
+version = "0.1.0"
+description = "Robot Framework library for testing LLM-powered applications"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "RoboAssay Contributors" }]
+requires-python = ">=3.8"
+keywords = ["robot framework", "testing", "llm", "ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Robot Framework",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "robotframework>=4.0.0",
+    "requests>=2.25.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+]
+
+[project.urls]
+Homepage = "https://github.com/xleetsuperhax/RoboAssay"
+Repository = "https://github.com/xleetsuperhax/RoboAssay"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
