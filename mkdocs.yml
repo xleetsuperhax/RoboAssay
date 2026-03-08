@@ -1,0 +1,78 @@
+site_name: RoboAssay
+site_description: Robot Framework keyword library for testing LLM-powered applications
+site_url: https://xleetsuperhax.github.io/RoboAssay/
+repo_name: xleetsuperhax/RoboAssay
+repo_url: https://github.com/xleetsuperhax/RoboAssay
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: installation.md
+    - Quick Start: quickstart.md
+  - Keyword Reference:
+    - Relevance: keywords/relevance.md
+    - Groundedness: keywords/groundedness.md
+    - Safety: keywords/safety.md
+    - Persona & Tone: keywords/persona.md
+    - Instruction Following: keywords/instruction-following.md
+    - Consistency: keywords/consistency.md
+    - Regression: keywords/regression.md
+  - Examples:
+    - Multi-Turn Conversations: examples/multi-turn.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/xleetsuperhax/RoboAssay
+
+copyright: Copyright &copy; 2026 RoboAssay Contributors
