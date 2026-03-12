@@ -16,6 +16,9 @@ def response_should_be_grounded_in(response: str, context: str) -> None:
     )
     verdict = call_judge(rubric, response, context=context)
     if not verdict["passed"]:
+        logger.warning(
+            f"Response is not grounded in the provided context. Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Response is not grounded in the provided context.\n"
             f"Reason: {verdict['reason']}\n"
@@ -34,6 +37,7 @@ def response_should_not_hallucinate(response: str, context: str) -> None:
     )
     verdict = call_judge(rubric, response, context=context)
     if not verdict["passed"]:
+        logger.warning(f"Response contains hallucinated content. Reason: {verdict['reason']}")
         raise AssertionError(
             f"Response contains hallucinated content.\n"
             f"Reason: {verdict['reason']}\n"
@@ -52,6 +56,7 @@ def response_should_not_contradict(response: str, context: str) -> None:
     )
     verdict = call_judge(rubric, response, context=context)
     if not verdict["passed"]:
+        logger.warning(f"Response contradicts the provided context. Reason: {verdict['reason']}")
         raise AssertionError(
             f"Response contradicts the provided context.\n"
             f"Reason: {verdict['reason']}\n"

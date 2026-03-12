@@ -6,8 +6,8 @@ import pytest
 
 from RoboAssay.groundedness import (
     response_should_be_grounded_in,
-    response_should_not_hallucinate,
     response_should_not_contradict,
+    response_should_not_hallucinate,
 )
 
 

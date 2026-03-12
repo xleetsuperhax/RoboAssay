@@ -9,7 +9,10 @@ try:
             rf_logger.info(f"[{self._name}] {msg}")
 
         def warn(self, msg):
-            rf_logger.warning(f"[{self._name}] {msg}")
+            rf_logger.warn(f"[{self._name}] {msg}")
+
+        def warning(self, msg):
+            rf_logger.warn(f"[{self._name}] {msg}")
 
         def debug(self, msg):
             rf_logger.debug(f"[{self._name}] {msg}")

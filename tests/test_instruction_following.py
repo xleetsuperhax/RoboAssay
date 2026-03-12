@@ -5,9 +5,9 @@ from unittest.mock import patch
 import pytest
 
 from RoboAssay.instruction_following import (
+    response_should_comply_with,
     response_should_follow_format,
     response_should_respect_topic_boundary,
-    response_should_comply_with,
 )
 
 

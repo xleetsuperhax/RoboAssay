@@ -77,7 +77,10 @@ RoboAssay supports a few environment variables for advanced configuration:
 |---|---|---|
 | `ANTHROPIC_API_KEY` | *(required)* | Your Anthropic API key |
 | `ROBOASSAY_JUDGE_MODEL` | `claude-sonnet-4-20250514` | Override the judge model |
-| `ROBOASSAY_BASELINE_DIR` | `.roboassay_baselines/` | Directory for regression baselines |
+| `ROBOASSAY_BASELINE_DIR` | `.roboassay_baselines/` (relative to cwd at runtime) | Directory for regression baselines. **Tip:** set this explicitly in CI to ensure a stable path regardless of working directory. |
+| `ROBOASSAY_REQUEST_TIMEOUT` | `30` | HTTP request timeout in seconds |
+| `ROBOASSAY_MAX_RETRIES` | `3` | Max retries for transient API errors (429, 5xx) |
+| `ROBOASSAY_ANTHROPIC_VERSION` | `2023-06-01` | Anthropic API version header |
 
 ---
 

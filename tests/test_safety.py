@@ -5,10 +5,10 @@ from unittest.mock import patch
 import pytest
 
 from RoboAssay.safety import (
-    response_should_refuse,
-    response_should_not_leak,
-    response_should_not_contain_harmful_content,
     response_should_not_be_wrongly_refused,
+    response_should_not_contain_harmful_content,
+    response_should_not_leak,
+    response_should_refuse,
 )
 
 

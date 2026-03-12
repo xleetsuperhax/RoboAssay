@@ -17,6 +17,7 @@ def response_should_not_contradict_itself(response: str) -> None:
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
+        logger.warning(f"Response contains internal contradictions. Reason: {verdict['reason']}")
         raise AssertionError(
             f"Response contains internal contradictions.\n"
             f"Reason: {verdict['reason']}\n"
@@ -28,6 +29,8 @@ def response_should_not_contradict_itself(response: str) -> None:
 @keyword("Conversation Should Be Consistent")
 def conversation_should_be_consistent(conversation_history: list) -> None:
     """Assert that a multi-turn conversation is consistent throughout."""
+    if not conversation_history:
+        raise AssertionError("Conversation history is empty.")
     formatted = "\n".join(
         f"{turn['role'].upper()}: {turn['content']}"
         for turn in conversation_history
@@ -40,6 +43,7 @@ def conversation_should_be_consistent(conversation_history: list) -> None:
     )
     verdict = call_judge(rubric, formatted)
     if not verdict["passed"]:
+        logger.warning(f"Conversation contains inconsistencies. Reason: {verdict['reason']}")
         raise AssertionError(
             f"Conversation contains inconsistencies.\n"
             f"Reason: {verdict['reason']}\n"
@@ -54,7 +58,6 @@ def last_response_should_reference(conversation_history: list, expected_referenc
     if not conversation_history:
         raise AssertionError("Conversation history is empty.")
 
-    last_turn = conversation_history[-1]
     formatted = "\n".join(
         f"{turn['role'].upper()}: {turn['content']}"
         for turn in conversation_history
@@ -66,6 +69,9 @@ def last_response_should_reference(conversation_history: list, expected_referenc
     )
     verdict = call_judge(rubric, formatted)
     if not verdict["passed"]:
+        logger.warning(
+            f"Last response does not reference '{expected_reference}'. Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Last response does not reference '{expected_reference}'.\n"
             f"Reason: {verdict['reason']}\n"
