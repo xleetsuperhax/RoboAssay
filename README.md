@@ -2,7 +2,9 @@
 
 A Robot Framework keyword library for testing LLM-powered applications.
 
-RoboAssay provides assertion-style keywords that validate LLM responses using an AI judge (Claude). It does **not** send prompts to any LLM — that is the responsibility of the test author. This library only receives response strings and asserts properties about them.
+RoboAssay provides assertion-style keywords that validate LLM responses using Claude as an AI judge. It does **not** call your application's LLM — that is the responsibility of the test author. You call your LLM, capture the response string, and pass it to RoboAssay, which forwards it to Claude for semantic evaluation against a rubric.
+
+**[Full documentation →](https://xleetsuperhax.github.io/RoboAssay/)**
 
 ## Installation
 
