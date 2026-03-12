@@ -52,7 +52,7 @@ def call_judge(rubric: str, response: str, context: str = "") -> dict:
         "content-type": "application/json",
     }
 
-    last_error: Exception | None = None
+    last_error = None
     for attempt in range(MAX_RETRIES):
         try:
             result = requests.post(
