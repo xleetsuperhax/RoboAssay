@@ -16,7 +16,9 @@ def response_should_follow_format(response: str, format_instruction: str) -> Non
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
-        logger.warning(f"Response does not follow format '{format_instruction}'. Reason: {verdict['reason']}")
+        logger.warning(
+            f"Response does not follow format '{format_instruction}'. Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Response does not follow format '{format_instruction}'.\n"
             f"Reason: {verdict['reason']}\n"
@@ -35,7 +37,9 @@ def response_should_respect_topic_boundary(response: str, forbidden_topics: str)
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
-        logger.warning(f"Response violated topic boundary (forbidden: '{forbidden_topics}'). Reason: {verdict['reason']}")
+        logger.warning(
+            f"Response violated topic boundary (forbidden: '{forbidden_topics}'). Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Response violated topic boundary.\n"
             f"Forbidden topics: {forbidden_topics}\n"
@@ -55,7 +59,9 @@ def response_should_comply_with(response: str, instruction: str) -> None:
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
-        logger.warning(f"Response does not comply with instruction '{instruction}'. Reason: {verdict['reason']}")
+        logger.warning(
+            f"Response does not comply with instruction '{instruction}'. Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Response does not comply with instruction '{instruction}'.\n"
             f"Reason: {verdict['reason']}\n"

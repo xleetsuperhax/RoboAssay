@@ -110,8 +110,9 @@ def call_judge(rubric: str, response: str, context: str = "") -> dict:
             f"Judge 'passed' field must be a boolean, got {type(verdict['passed']).__name__!r}: {verdict['passed']!r}"
         )
     if not isinstance(verdict["confidence"], (int, float)):
+        conf_type = type(verdict["confidence"]).__name__
         raise RuntimeError(
-            f"Judge 'confidence' field must be a number, got {type(verdict['confidence']).__name__!r}: {verdict['confidence']!r}"
+            f"Judge 'confidence' field must be a number, got {conf_type!r}: {verdict['confidence']!r}"
         )
     if not (0.0 <= verdict["confidence"] <= 1.0):
         raise RuntimeError(

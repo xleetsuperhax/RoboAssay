@@ -58,7 +58,6 @@ def last_response_should_reference(conversation_history: list, expected_referenc
     if not conversation_history:
         raise AssertionError("Conversation history is empty.")
 
-    last_turn = conversation_history[-1]
     formatted = "\n".join(
         f"{turn['role'].upper()}: {turn['content']}"
         for turn in conversation_history
@@ -70,7 +69,9 @@ def last_response_should_reference(conversation_history: list, expected_referenc
     )
     verdict = call_judge(rubric, formatted)
     if not verdict["passed"]:
-        logger.warning(f"Last response does not reference '{expected_reference}'. Reason: {verdict['reason']}")
+        logger.warning(
+            f"Last response does not reference '{expected_reference}'. Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Last response does not reference '{expected_reference}'.\n"
             f"Reason: {verdict['reason']}\n"

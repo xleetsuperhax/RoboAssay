@@ -16,7 +16,9 @@ def response_tone_should_match(response: str, expected_tone: str) -> None:
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
-        logger.warning(f"Response tone does not match '{expected_tone}'. Reason: {verdict['reason']}")
+        logger.warning(
+            f"Response tone does not match '{expected_tone}'. Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Response tone does not match '{expected_tone}'.\n"
             f"Reason: {verdict['reason']}\n"
@@ -36,7 +38,9 @@ def response_should_stay_in_persona(response: str, persona_description: str) -> 
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
-        logger.warning(f"Response broke persona '{persona_description}'. Reason: {verdict['reason']}")
+        logger.warning(
+            f"Response broke persona '{persona_description}'. Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Response broke persona '{persona_description}'.\n"
             f"Reason: {verdict['reason']}\n"

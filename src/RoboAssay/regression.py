@@ -39,14 +39,18 @@ def response_should_match_baseline_semantically(
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
-        logger.warning(f"Response does not semantically match baseline (threshold={threshold}). Reason: {verdict['reason']}")
+        logger.warning(
+            f"Response does not semantically match baseline (threshold={threshold}). Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Response does not semantically match baseline (threshold={threshold}).\n"
             f"Reason: {verdict['reason']}\n"
             f"Confidence: {verdict['confidence']}"
         )
     if verdict["confidence"] < threshold:
-        logger.warning(f"Response matched baseline but confidence {verdict['confidence']:.2f} is below threshold {threshold}.")
+        logger.warning(
+            f"Response matched baseline but confidence {verdict['confidence']:.2f} is below threshold {threshold}."
+        )
         raise AssertionError(
             f"Response matched baseline but confidence {verdict['confidence']:.2f} is below threshold {threshold}.\n"
             f"Reason: {verdict['reason']}"
@@ -90,7 +94,9 @@ def response_behavior_should_not_have_changed(response: str, baseline_id: str) -
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
-        logger.warning(f"Response behavior has changed from baseline '{baseline_id}'. Reason: {verdict['reason']}")
+        logger.warning(
+            f"Response behavior has changed from baseline '{baseline_id}'. Reason: {verdict['reason']}"
+        )
         raise AssertionError(
             f"Response behavior has changed from baseline '{baseline_id}'.\n"
             f"Reason: {verdict['reason']}\n"
