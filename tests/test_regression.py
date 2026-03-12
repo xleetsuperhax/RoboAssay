@@ -58,7 +58,7 @@ class TestResponseShouldMatchBaselineSemantically:
 
 class TestSaveResponseAsBaseline:
     def test_saves_baseline_to_disk(self, mock_env, tmp_path):
-        with patch("RoboAssay.regression.BASELINE_DIR", str(tmp_path)):
+        with patch.dict("os.environ", {"ROBOASSAY_BASELINE_DIR": str(tmp_path)}):
             save_response_as_baseline("This is the response text.", "my-baseline-id")
             baseline_file = tmp_path / "my-baseline-id.json"
             assert baseline_file.exists()
@@ -73,7 +73,7 @@ class TestResponseBehaviorShouldNotHaveChanged:
         baseline_file = tmp_path / "behavior-check.json"
         baseline_file.write_text(json.dumps(baseline_data))
 
-        with patch("RoboAssay.regression.BASELINE_DIR", str(tmp_path)):
+        with patch.dict("os.environ", {"ROBOASSAY_BASELINE_DIR": str(tmp_path)}):
             with patch("RoboAssay.regression.call_judge") as mock_judge:
                 mock_judge.return_value = {"passed": True, "confidence": 0.94, "reason": "Behavior is equivalent"}
                 response_behavior_should_not_have_changed("The answer is forty-two.", "behavior-check")
@@ -83,7 +83,7 @@ class TestResponseBehaviorShouldNotHaveChanged:
         baseline_file = tmp_path / "behavior-check.json"
         baseline_file.write_text(json.dumps(baseline_data))
 
-        with patch("RoboAssay.regression.BASELINE_DIR", str(tmp_path)):
+        with patch.dict("os.environ", {"ROBOASSAY_BASELINE_DIR": str(tmp_path)}):
             with patch("RoboAssay.regression.call_judge") as mock_judge:
                 mock_judge.return_value = {"passed": False, "confidence": 0.91, "reason": "Behavior differs from baseline"}
                 with pytest.raises(AssertionError, match="behavior has changed"):
@@ -93,6 +93,6 @@ class TestResponseBehaviorShouldNotHaveChanged:
                     )
 
     def test_fails_when_baseline_not_found(self, mock_env, tmp_path):
-        with patch("RoboAssay.regression.BASELINE_DIR", str(tmp_path)):
+        with patch.dict("os.environ", {"ROBOASSAY_BASELINE_DIR": str(tmp_path)}):
             with pytest.raises(AssertionError, match="not found"):
                 response_behavior_should_not_have_changed("Some response.", "nonexistent-baseline")

@@ -69,7 +69,7 @@ class TestCallJudge:
             call_args = mock_post.call_args
             payload = call_args[1]["json"]
             prompt = payload["messages"][0]["content"]
-            assert "CONTEXT:" in prompt
+            assert "<context>" in prompt
             assert "some context" in prompt
 
     def test_excludes_context_when_empty(self, mock_env, mock_judge_response):
@@ -79,7 +79,7 @@ class TestCallJudge:
             call_args = mock_post.call_args
             payload = call_args[1]["json"]
             prompt = payload["messages"][0]["content"]
-            assert "CONTEXT:" not in prompt
+            assert "<context>" not in prompt
 
     def test_uses_default_model(self, mock_env, mock_judge_response):
         with patch("RoboAssay.utils.judge.requests.post") as mock_post:
@@ -126,13 +126,14 @@ class TestCallJudge:
 
     def test_raises_runtime_error_on_http_error(self, mock_env):
         with patch("RoboAssay.utils.judge.requests.post") as mock_post:
-            error_response = MagicMock()
-            error_response.status_code = 429
-            error_response.text = "Too Many Requests"
-            http_err = requests.HTTPError(response=error_response)
-            mock_post.return_value.raise_for_status.side_effect = http_err
-            with pytest.raises(RuntimeError, match="429"):
-                call_judge("rubric", "response")
+            with patch("RoboAssay.utils.judge.time.sleep"):
+                error_response = MagicMock()
+                error_response.status_code = 429
+                error_response.text = "Too Many Requests"
+                http_err = requests.HTTPError(response=error_response)
+                mock_post.return_value.raise_for_status.side_effect = http_err
+                with pytest.raises(RuntimeError, match="429"):
+                    call_judge("rubric", "response")
 
     def test_raises_runtime_error_on_non_json_response(self, mock_env):
         with patch("RoboAssay.utils.judge.requests.post") as mock_post:
