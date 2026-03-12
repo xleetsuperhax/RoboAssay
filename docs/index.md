@@ -15,7 +15,7 @@ Response Tone Should Match           ${response}    professional
 
 ## How It Works
 
-RoboAssay is **response-only** — it does not send prompts to any LLM. Your test suite is responsible for calling your LLM and capturing the response. RoboAssay then evaluates that response string against a rubric using Claude as a judge.
+RoboAssay is **response-only** — it does not call your application's LLM. Your test suite is responsible for calling your LLM and capturing the response string. RoboAssay then passes that response to Claude (acting as an AI judge), which evaluates it against a rubric and returns a pass/fail verdict.
 
 ```
 Your test  →  calls your LLM  →  gets a response string

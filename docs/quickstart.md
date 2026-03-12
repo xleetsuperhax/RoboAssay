@@ -106,7 +106,7 @@ Conversation Stays Consistent
 
 ## What's Next
 
-- Explore the full [keyword reference](keywords/relevance.md) for all 20 keywords
+- Explore the full [keyword reference](keywords/relevance.md) for all 22 keywords
 - Learn about [regression testing](keywords/regression.md) to catch behavioral drift
 - See [multi-turn examples](examples/multi-turn.md) for conversation testing patterns
 
