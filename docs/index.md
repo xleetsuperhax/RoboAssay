@@ -31,7 +31,7 @@ Your test  →  calls your LLM  →  gets a response string
 
 <div class="grid cards" markdown>
 
-- **20 built-in keywords** covering relevance, groundedness, safety, persona, instruction-following, consistency, and regression testing
+- **22 built-in keywords** covering relevance, groundedness, safety, persona, instruction-following, consistency, and regression testing — plus 3 conversation-building helpers
 
 - **AI-powered assertions** — no regex, no exact-match. Claude understands semantics.
 

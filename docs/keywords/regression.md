@@ -10,7 +10,10 @@ As LLMs evolve — through model updates, prompt changes, or configuration drift
 
 **Arguments:** `response`, `baseline_id`
 
-Saves a response as a named baseline for future regression checks. Baselines are stored as JSON files in `.roboassay_baselines/` (relative to the current working directory). The directory is created automatically.
+Saves a response as a named baseline for future regression checks. Baselines are stored as JSON files in `.roboassay_baselines/` relative to the **current working directory at test runtime**. The directory is created automatically.
+
+!!! warning "CI path stability"
+    The default baseline directory resolves relative to whichever directory your test runner starts from. Set `ROBOASSAY_BASELINE_DIR` to an absolute path in CI environments to guarantee consistent baseline locations across runs.
 
 ```robot
 Save Response As Baseline    ${response}    refund-policy-v1

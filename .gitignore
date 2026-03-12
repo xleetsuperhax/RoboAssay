@@ -22,3 +22,7 @@ report.html
 *.swo
 *~
 .DS_Store
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/

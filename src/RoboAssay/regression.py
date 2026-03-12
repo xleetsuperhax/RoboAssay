@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime, timezone
 
 from robot.api.deco import keyword
 
@@ -8,14 +9,19 @@ from RoboAssay.utils.roboassay_logger import get_logger
 
 logger = get_logger("regression")
 
-BASELINE_DIR = os.environ.get(
-    "ROBOASSAY_BASELINE_DIR",
-    os.path.join(os.getcwd(), ".roboassay_baselines"),
-)
+_BASELINE_SCHEMA_VERSION = 1
+
+
+def _get_baseline_dir() -> str:
+    """Return the baseline directory, evaluated at call time to respect cwd changes."""
+    return os.environ.get(
+        "ROBOASSAY_BASELINE_DIR",
+        os.path.join(os.getcwd(), ".roboassay_baselines"),
+    )
 
 
 def _get_baseline_path(baseline_id: str) -> str:
-    return os.path.join(BASELINE_DIR, f"{baseline_id}.json")
+    return os.path.join(_get_baseline_dir(), f"{baseline_id}.json")
 
 
 @keyword("Response Should Match Baseline Semantically")
@@ -33,10 +39,17 @@ def response_should_match_baseline_semantically(
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
+        logger.warning(f"Response does not semantically match baseline (threshold={threshold}). Reason: {verdict['reason']}")
         raise AssertionError(
             f"Response does not semantically match baseline (threshold={threshold}).\n"
             f"Reason: {verdict['reason']}\n"
             f"Confidence: {verdict['confidence']}"
+        )
+    if verdict["confidence"] < threshold:
+        logger.warning(f"Response matched baseline but confidence {verdict['confidence']:.2f} is below threshold {threshold}.")
+        raise AssertionError(
+            f"Response matched baseline but confidence {verdict['confidence']:.2f} is below threshold {threshold}.\n"
+            f"Reason: {verdict['reason']}"
         )
     logger.info(f"Response matches baseline. Reason: {verdict['reason']}")
 
@@ -44,9 +57,15 @@ def response_should_match_baseline_semantically(
 @keyword("Save Response As Baseline")
 def save_response_as_baseline(response: str, baseline_id: str) -> None:
     """Save a response as a baseline for future regression checks."""
-    os.makedirs(BASELINE_DIR, exist_ok=True)
+    baseline_dir = _get_baseline_dir()
+    os.makedirs(baseline_dir, exist_ok=True)
     path = _get_baseline_path(baseline_id)
-    data = {"baseline_id": baseline_id, "response": response}
+    data = {
+        "schema_version": _BASELINE_SCHEMA_VERSION,
+        "baseline_id": baseline_id,
+        "response": response,
+        "saved_at": datetime.now(timezone.utc).isoformat(),
+    }
     with open(path, "w") as f:
         json.dump(data, f, indent=2)
     logger.info(f"Baseline saved as '{baseline_id}' at {path}")
@@ -71,6 +90,7 @@ def response_behavior_should_not_have_changed(response: str, baseline_id: str) -
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
+        logger.warning(f"Response behavior has changed from baseline '{baseline_id}'. Reason: {verdict['reason']}")
         raise AssertionError(
             f"Response behavior has changed from baseline '{baseline_id}'.\n"
             f"Reason: {verdict['reason']}\n"

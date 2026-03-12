@@ -15,6 +15,7 @@ def response_should_be_relevant_to(response: str, topic: str) -> None:
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
+        logger.warning(f"Response failed relevance check for topic '{topic}'. Reason: {verdict['reason']}")
         raise AssertionError(
             f"Response failed relevance check for topic '{topic}'.\n"
             f"Reason: {verdict['reason']}\n"
@@ -32,6 +33,7 @@ def response_should_answer_question(response: str, question: str) -> None:
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
+        logger.warning(f"Response does not answer question '{question}'. Reason: {verdict['reason']}")
         raise AssertionError(
             f"Response does not answer the question '{question}'.\n"
             f"Reason: {verdict['reason']}\n"
@@ -49,6 +51,7 @@ def response_should_address_all_parts(response: str, question: str) -> None:
     )
     verdict = call_judge(rubric, response)
     if not verdict["passed"]:
+        logger.warning(f"Response does not address all parts of '{question}'. Reason: {verdict['reason']}")
         raise AssertionError(
             f"Response does not address all parts of '{question}'.\n"
             f"Reason: {verdict['reason']}\n"
