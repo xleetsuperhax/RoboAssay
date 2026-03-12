@@ -1,14 +1,14 @@
 """Tests for the relevance keyword module."""
 
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from RoboAssay.relevance import (
-    response_should_be_relevant_to,
-    response_should_answer_question,
     response_should_address_all_parts,
+    response_should_answer_question,
+    response_should_be_relevant_to,
 )
 
 

@@ -1,15 +1,14 @@
 """Tests for the regression keyword module."""
 
 import json
-import os
 from unittest.mock import patch
 
 import pytest
 
 from RoboAssay.regression import (
+    response_behavior_should_not_have_changed,
     response_should_match_baseline_semantically,
     save_response_as_baseline,
-    response_behavior_should_not_have_changed,
 )
 
 

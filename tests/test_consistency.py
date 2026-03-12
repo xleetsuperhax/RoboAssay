@@ -5,9 +5,9 @@ from unittest.mock import patch
 import pytest
 
 from RoboAssay.consistency import (
-    response_should_not_contradict_itself,
     conversation_should_be_consistent,
     last_response_should_reference,
+    response_should_not_contradict_itself,
 )
 
 

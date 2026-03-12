@@ -1,9 +1,9 @@
 """Tests for the conversation helper keyword module."""
 
 from RoboAssay.utils.conversation import (
-    start_conversation,
-    add_user_turn,
     add_assistant_turn,
+    add_user_turn,
+    start_conversation,
 )
 
 

@@ -1,12 +1,12 @@
 """Tests for the judge utility module."""
 
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 import requests
 
-from RoboAssay.utils.judge import call_judge, DEFAULT_JUDGE_MODEL
+from RoboAssay.utils.judge import DEFAULT_JUDGE_MODEL, call_judge
 
 
 @pytest.fixture

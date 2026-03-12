@@ -5,9 +5,9 @@ from unittest.mock import patch
 import pytest
 
 from RoboAssay.persona import (
-    response_tone_should_match,
-    response_should_stay_in_persona,
     response_language_should_be,
+    response_should_stay_in_persona,
+    response_tone_should_match,
 )
 
 
