@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "robotframework-roboassay"
-version = "0.1.0"
+version = "1.0.0"
 description = "Robot Framework library for testing LLM-powered applications"
 readme = "README.md"
 license = { text = "MIT" }
@@ -12,7 +12,7 @@ authors = [{ name = "RoboAssay Contributors" }]
 requires-python = ">=3.8"
 keywords = ["robot framework", "testing", "llm", "ai"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Framework :: Robot Framework",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
